@@ -1,10 +1,20 @@
-// importing express library
+const express = require('express');
+const htmlRoute = require('./routes/html')
+const apiRoutes = require('./routes/api')
 
-const express = require('espress');
+const PORT = process.env.PORT || 3001;
 
-//importing modular routers for notes
-const notesRouter = ('./notes');
+const app = express();
 
-const app = express()
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-app.use('./notes', notesRouter)
+app.use(express.static('public'));
+
+app.use('/api', apiRoutes);
+app.use('/', htmlRoute);
+
+app.listen(PORT, () =>
+  console.log(`App listening at http://localhost:${PORT} 🚀`)
+);
+

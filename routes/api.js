@@ -9,13 +9,13 @@ router.get('/notes', (req, res) => {
 
 // Posts the users data into the saved side on the left
 router.post('/notes', (req, res) => {
-  const dbJson = JSON.parse(fs.readFromFile('db/db.json'));
-  const newNote = {
+  const dbJson = JSON.parse(readFromFile('db/db.json')); //parsing the json data to be able to read from the file
+  const newFeedback = {
     title: req.body.title,
-    text: req.body.text;
+    text: req.body.text,
     id: uuid,
   }
-  dbJson.push(newNote);
+  dbJson.push(newFeedback);
   fs.writeToFile('db/db.json',JSON.stringify(dbJson))
   res.json(dbJson)
 });

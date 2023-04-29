@@ -1,23 +1,34 @@
 const router = require('express').Router();
-const { readFromFile, writeToFile, readAndAppend } = require('../helper/utils.js');
+const { Router } = require('express');
+const { readFromFile, readAndAppend } = require('../helper/utils.js');
 const uuid = require('../helper/uuid.js')
+
 
 // Gets the users notes typed on the html and saves into the db.json i.e it's saving the data
 router.get('/notes', (req, res) => {
-    readFromFile('./db/db.json').then((data) => res.json(JSON.parse(data)));
-  });
+  readFromFile('./db/db.json').then(data => res.json(JSON.parse(data)));
+
+});
 
 // Posts the users data into the saved side on the left
+
 router.post('/notes', (req, res) => {
-  const dbJson = JSON.parse(readFromFile('db/db.json')); //parsing the json data to be able to read from the file
-  const newFeedback = {
-    title: req.body.title,
-    text: req.body.text,
-    id: uuid,
-  }
-  dbJson.push(newFeedback);
-  fs.writeToFile('db/db.json',JSON.stringify(dbJson))
-  res.json(dbJson)
+  const newNote = req.body;
+  newNote.id = uuid();
+  readAndAppend(req.body, './db/db.json');
+  return res.json({});
+});
+
+router.delete('/notes/:id', (req, res) => {
+  readFromFile('./db/db.json').then(data => {
+    console.log('data = ', data)
+    const allNotes = JSON.parse(data);
+    console.log('allNotes: ', allNotes);
+    const newNoteList = allNotes.filter(note => note.id !== req.params.id);
+    console.log('newNoteList: ', newNoteList);
+    writeToFile('./db/db.json', newNoteList);
+    res.json({});
+}).catch(err => res.status(500));
 });
 
 module.exports = router;

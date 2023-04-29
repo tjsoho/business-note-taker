@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const { Router } = require('express');
-const { readFromFile, readAndAppend } = require('../helper/utils.js');
+const { readFromFile, writeToFile, readAndAppend } = require('../helper/utils.js');
 const uuid = require('../helper/uuid.js')
 
 

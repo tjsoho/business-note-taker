@@ -21,11 +21,9 @@ router.post('/notes', (req, res) => {
 
 router.delete('/notes/:id', (req, res) => {
   readFromFile('./db/db.json').then(data => {
-    console.log('data = ', data)
-    const allNotes = JSON.parse(data);
-    console.log('allNotes: ', allNotes);
+    const allNotes = JSON.parse(data);    
     const newNoteList = allNotes.filter(note => note.id !== req.params.id);
-    console.log('newNoteList: ', newNoteList);
+    
     writeToFile('./db/db.json', newNoteList);
     res.json({});
 }).catch(err => res.status(500));
